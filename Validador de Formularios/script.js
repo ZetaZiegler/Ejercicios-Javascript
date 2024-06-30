@@ -1,3 +1,19 @@
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9kDehPFcpCMknnjFag67vWN0gheuK9o4",
+        authDomain: "datas-formulario.firebaseapp.com",
+        projectId: "datas-formulario",
+        storageBucket: "datas-formulario.appspot.com",
+        messagingSenderId: "653224918600",
+        appId: "1:653224918600:web:e6142ddf6f7b3cb499e27d",
+        measurementId: "G-0GL9C7J83G"
+      };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = firebase.firestore();
+
 document.getElementById('formulario').addEventListener('submit', (event) =>{
     event.preventDefault()
 
@@ -37,7 +53,18 @@ document.getElementById('formulario').addEventListener('submit', (event) =>{
     //Si todos los campos son válidos, enviamos el formulario
     if(!errorNombre.textContent && !emailError.textContent && !contrasenaError.textContent){
 
-        alert('El formulario se ha enviado con éxito')
-        document.getElementById('formulario').reset();
+        db.collection("users").add({
+            nombre: entradaNombre.value,
+            email: emailEntrada.value,
+            password: contrasenaEntrada.value
+        })
+        .then((docRef) => {
+            alert('El formulario se ha enviado con éxito',docRef.id)
+            document.getElementById('formulario').reset();
+        })
+        .catch((error) => {
+            alert(error)
+        });
+        
     }
 }) 
